@@ -81,5 +81,30 @@ public class HospitalManager {
             }
         }
     }
+
+    public void displayWardLayout() {//method to display ward layout
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(beds[i][j] + (occupants[i][j] == null ? "(Free) " : "(Occ)  "));//display bed status
+            }
+            System.out.println();
+        }
+    }
+
+    public int getTotalOccupiedBeds() {//method to get total occupied beds
+        int count = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (occupants[i][j] != null) count++;
+            }
+        }
+        return count;
+    }
+
+    public void displayWardOccupancyPercentage() {//method to display ward occupancy percentage
+        int occupied = getTotalOccupiedBeds();
+        double percentage = ((double) occupied / 20) * 100;
+        System.out.printf("Ward Occupancy: %.2f%%\n", percentage);
+    }
 }
 
