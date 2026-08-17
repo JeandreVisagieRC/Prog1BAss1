@@ -33,5 +33,53 @@ public class HospitalManager {
     public List<Patient> getAllPatients() {//method to get all patients
         return patients;
     }
+
+    private String[][] beds = new String[4][5];
+    private String[][] occupants = new String[4][5]; // stores patient id
+
+    // Call this in the constructor
+    public void initializeBeds() {
+        int bedCounter = 1;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 5; j++) {
+                beds[i][j] = String.format("B%02d", bedCounter++);
+                occupants[i][j] = null; // null means available
+            }
+        }
+    }
+
+    public boolean allocateBed(String patientId) {
+        Patient p = searchPatient(patientId);
+        if (p == null || p.getCategory() != PatientCategory.INPATIENT) return false;
+        
+        Inpatient inpatient = (Inpatient) p;
+        if (!inpatient.getBedNumber().equals("Not Assigned")) return false; // already has a bed
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (occupants[i][j] == null) {
+                    occupants[i][j] = patientId;
+                    inpatient.setBedNumber(beds[i][j]);
+                    return true;
+                }
+            }
+        }
+        return false; // no beds available
+    }
+
+    public void releaseBed(String patientId) {
+        Patient p = searchPatient(patientId);
+        if (p != null && p instanceof Inpatient) {
+            ((Inpatient) p).setBedNumber("Not Assigned");
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 5; j++) {
+                    if (patientId.equals(occupants[i][j])) {
+                        occupants[i][j] = null;
+                        return;
+                    }
+                }
+            }
+        }
+    }
 }
 
