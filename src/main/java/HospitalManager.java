@@ -67,7 +67,7 @@ public class HospitalManager {
         return false; // no beds available
     }
 
-    public void releaseBed(String patientId) {
+    public void releaseBed(String patientId) {//method to release bed for a patient
         Patient p = searchPatient(patientId);
         if (p != null && p instanceof Inpatient) {
             ((Inpatient) p).setBedNumber("Not Assigned");
